@@ -1,4 +1,177 @@
-h1{
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #353e4b;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  margin: 0 auto;
+  max-width: 800px;
+  border-radius: 20px;
+  background-color: #2b2b2b;
+}
+/* 當天天氣 */
+.oneDayWeather {
+  width: 200px;
+  border-radius: 20px;
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  padding: 30px 0px 30px 15px;
+}
+
+.oneDayWeather:hover {
+  background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+}
+
+.dayOfTheWeek {
+  font-size: 25px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.date {
+  font-size: 17px;
+  color: white;
+}
+.oneDayWeatherInfo {
+  margin-top: 100px;
+}
+.weatherIcon {
+  background-image: url("/static/image/sunny-outline.svg");
+  width: 70px;
+  height: 70px;
+  filter: brightness(0) invert(1);
+}
+
+.weatherTemperature {
+  font-size: 50px;
+  margin-bottom: 10px;
+  color: white;
+  font-weight: 700;
+}
+.weatherStatus {
+  font-size: 20px;
+  color: white;
   font-weight: 500;
-  color: red;
+}
+/* 七天天氣 */
+.sevenDaysWeather {
+  margin: 30px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.sevenDaysWeather-title {
+  font-size: 30px;
+  color: white;
+  text-align: center;
+  margin-bottom: 30px;
+}
+/*下拉式選單*/
+#selectedCity {
+  height: 40px;
+  border-radius: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: white;
+}
+
+#selectedCity:hover {
+  background-color: #c6daf9;
+}
+
+.sevenDaysWeatherInfo {
+  display: flex;
+  margin: 30px 30px 0px 30px;
+  gap: 10px;
+  /* flex: 1; */
+}
+.sevenDaysWeatherInfo-item {
+  border-radius: 10px;
+  width: 60px;
+  /* height: 180px; */
+  color: #353e4b;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #666;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.sevenDaysWeatherInfo-item:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  background-color: #666;
+}
+.sevenDaysWeatherInfo-item-icon {
+  filter: brightness(0) invert(1);
+  width: 30px;
+  height: 30px;
+}
+.sevenDaysWeatherInfo-temperature {
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+.sevenDaysWeatherInfo-date {
+  color: wheat;
+  font-size: 22px;
+  font-weight: 900;
+  border-bottom: 2px solid wheat;
+  padding-bottom: 2px;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    display: block;
+  }
+  .container {
+    margin-top: 30px;
+    width: 90%;
+    flex-wrap: wrap;
+  }
+  .oneDayWeather {
+    width: 100%;
+    height: 200px;
+  }
+  .oneDayWeatherInfo {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    gap: 20px;
+  }
+  .weatherTemperature {
+    margin-bottom: 0px;
+  }
+  .sevenDaysWeather {
+    width: 100%;
+    margin: 20px 0px;
+  }
+  .sevenDaysWeatherInfo {
+    width: 90%;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 10px 0px 10px;
+  }
+  .sevenDaysWeatherInfo-item {
+    flex-direction: row;
+    width: 70%;
+    height: 60px;
+  }
+  .sevenDaysWeather-title {
+    margin-bottom: 10px;
+  }
 }
