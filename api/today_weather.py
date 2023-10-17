@@ -7,13 +7,21 @@ api_today_weather = Blueprint('api_today_weather', __name__)
 # 各縣市當下天氣資料
 @api_today_weather.route("/api/today_weather",methods=["GET"])
 def today_weather():
-    info = getdata()
-    search_value=request.args.get("search")
-    for index, item in enumerate(info):
-        if item["location_name"] == search_value:
-            response = info[index]
-            break
-    return jsonify(response)
+    try:
+        info = getdata()
+        search_value=request.args.get("search")
+        for index, item in enumerate(info):
+            if item["location_name"] == search_value:
+                response = info[index]
+                break
+        return jsonify(response)
+    except Exception as e :  
+        error_message=str(e)
+        response={
+            "error":True,
+            "message": error_message
+            }
+        return jsonify(response)
 
 
 # 資料整理

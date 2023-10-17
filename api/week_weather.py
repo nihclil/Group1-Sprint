@@ -7,13 +7,21 @@ api_week_weather = Blueprint('api_week_weather', __name__)
 # 各縣市一週天氣資料
 @api_week_weather.route("/api/week_weather",methods=["GET"])
 def week_weather():
-    info = getdata()
-    search_value=request.args.get("search")
-    for index, item in enumerate(info):
-        if item["location_name"] == search_value:
-            response = info[index]
-            break
-    return jsonify(response)
+    try:
+        info = getdata()
+        search_value=request.args.get("search")
+        for index, item in enumerate(info):
+            if item["location_name"] == search_value:
+                response = info[index]
+                break
+        return jsonify(response)
+    except Exception as e :  
+        error_message=str(e)
+        response={
+            "error":True,
+            "message": error_message
+            }
+        return jsonify(response)
 
 
 # 資料整理
