@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <body>
     <div class="container">
-      <section class="oneDayWeather">
-        <div class="dayOfTheWeek">Tuesday</div>
+      <section class="oneDayWeather" id="loader">
+        <div class="dayOfTheWeek"></div>
 
-        <div class="date">2023-10-16</div>
+        <div class="date"></div>
         <div class="oneDayWeatherInfo">
           <div class="weatherIcon"></div>
-          <div class="weatherTemperature">29℃</div>
-          <div class="weatherStatus">Sunny</div>
+          <div class="weatherTemperature"></div>
+          <div class="weatherStatus"></div>
         </div>
       </section>
       <section class="sevenDaysWeather">
@@ -49,6 +49,7 @@
         </select>
 
         <div class="sevenDaysWeatherInfo">
+          <div class="loader">載入中...</div>
           <!-- <div class="sevenDaysWeatherInfo-item">
             <div class="sevenDaysWeatherInfo-date">17</div>
             <img

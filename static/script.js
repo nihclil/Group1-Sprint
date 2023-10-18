@@ -3,7 +3,6 @@ console.log("This is the start of our Sprint");
 document.addEventListener("DOMContentLoaded", async function () {
   //顯示時間畫面渲染
   renderDateAndWeekday();
-
   //先載入臺中市天氣
   try {
     const defaultCity = "臺中市";
@@ -16,7 +15,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
-
   //監聽下拉式選單，處理後續畫面呈現
   const dropDownList = document.getElementById("selectedCity");
   dropDownList.addEventListener("change", async function () {
@@ -24,10 +22,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (cityNameValue) {
       try {
-        const todayData = await fetchTodayWeatherForCity(cityNameValue);
+        const [todayData, weekData] = await Promise.all([
+          fetchTodayWeatherForCity(cityNameValue),
+          fetchWeekWeatherForCity(cityNameValue),
+        ]);
         renderTodayWeather(todayData);
-
-        const weekData = await fetchWeekWeatherForCity(cityNameValue);
         renderWeekWeather(weekData);
       } catch (error) {
         console.error("Error fetching weather data:", error);
@@ -76,9 +75,7 @@ function getDateInfo(date = new Date()) {
 //取得當天的天氣資訊
 async function fetchTodayWeatherForCity(city) {
   try {
-    const response = await fetch(
-      `/api/today_weather?search=${city}`
-    );
+    const response = await fetch(`/api/today_weather?search=${city}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -94,25 +91,35 @@ async function fetchTodayWeatherForCity(city) {
 
 //渲染當天天氣畫面
 function renderTodayWeather(data) {
-  //天氣溫度分佈
   const weatherTemperature = document.querySelector(".weatherTemperature");
-  weatherTemperature.textContent = `${data.max_temperature}℃`;
-
-  //天氣狀況
   const weatherStatus = document.querySelector(".weatherStatus");
-  weatherStatus.textContent = `${data.weather}`;
-
-  //天氣圖樣式呈現
   const weatherIcon = document.querySelector(".weatherIcon");
-  weatherIcon.style.backgroundImage = `url(${getWeatherIcon(data.weather)})`;
+
+  weatherTemperature.classList.add("fade-out");
+  weatherStatus.classList.add("fade-out");
+  weatherIcon.classList.add("fade-out");
+
+  setTimeout(() => {
+    weatherStatus.textContent = `${data.weather}`;
+    weatherTemperature.textContent = `${data.max_temperature}℃`;
+    weatherIcon.style.backgroundImage = `url(${getWeatherIcon(data.weather)})`;
+
+    weatherTemperature.classList.remove("fade-out");
+    weatherStatus.classList.remove("fade-out");
+    weatherIcon.classList.remove("fade-out");
+
+    setTimeout(() => {
+      weatherTemperature.classList.add("fade-in");
+      weatherStatus.classList.add("fade-in");
+      weatherIcon.classList.add("fade-in");
+    }, 50);
+  }, 300);
 }
 
 //取得一個禮拜的天氣資訊
 async function fetchWeekWeatherForCity(city) {
   try {
-    const response = await fetch(
-      `/api/week_weather?search=${city}`
-    );
+    const response = await fetch(`/api/week_weather?search=${city}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -131,34 +138,43 @@ function renderWeekWeather(data) {
   const nextSevenDaysInfo = getNextSevenDays();
 
   const sevenDaysWeatherInfo = document.querySelector(".sevenDaysWeatherInfo");
+  //淡出效果
 
   //清除現有元素
-  while (sevenDaysWeatherInfo.firstChild) {
-    sevenDaysWeatherInfo.removeChild(sevenDaysWeatherInfo.firstChild);
-  }
+  setTimeout(() => {
+    while (sevenDaysWeatherInfo.firstChild) {
+      sevenDaysWeatherInfo.removeChild(sevenDaysWeatherInfo.firstChild);
+    }
+    sevenDaysWeatherInfo.classList.remove("fade-in");
 
-  for (let i = 0; i < 7; i++) {
-    const sevenDaysWeatherItem = document.createElement("div");
-    sevenDaysWeatherItem.className = "sevenDaysWeatherInfo-item";
+    for (let i = 0; i < 7; i++) {
+      const sevenDaysWeatherItem = document.createElement("div");
+      sevenDaysWeatherItem.className = "sevenDaysWeatherInfo-item";
 
-    const sevenDaysWeatherDate = document.createElement("div");
-    sevenDaysWeatherDate.className = "sevenDaysWeatherInfo-date";
-    sevenDaysWeatherDate.textContent = nextSevenDaysInfo[i + 1].day;
+      const sevenDaysWeatherDate = document.createElement("div");
+      sevenDaysWeatherDate.className = "sevenDaysWeatherInfo-date";
+      sevenDaysWeatherDate.textContent = nextSevenDaysInfo[i + 1].day;
 
-    const sevenDaysWeatherIcon = document.createElement("img");
-    sevenDaysWeatherIcon.className = "sevenDaysWeatherInfo-item-icon";
-    sevenDaysWeatherIcon.src = getWeatherIcon(data.week_weather[i]);
+      const sevenDaysWeatherIcon = document.createElement("img");
+      sevenDaysWeatherIcon.className = "sevenDaysWeatherInfo-item-icon";
+      sevenDaysWeatherIcon.src = getWeatherIcon(data.week_weather[i]);
 
-    const sevenDaysWeatherTemperature = document.createElement("div");
-    sevenDaysWeatherTemperature.className = "sevenDaysWeatherInfo-temperature";
-    sevenDaysWeatherTemperature.textContent = `${data.max_temperature[i]}℃`;
+      const sevenDaysWeatherTemperature = document.createElement("div");
+      sevenDaysWeatherTemperature.className =
+        "sevenDaysWeatherInfo-temperature";
+      sevenDaysWeatherTemperature.textContent = `${data.max_temperature[i]}℃`;
 
-    sevenDaysWeatherItem.appendChild(sevenDaysWeatherDate);
-    sevenDaysWeatherItem.appendChild(sevenDaysWeatherIcon);
-    sevenDaysWeatherItem.appendChild(sevenDaysWeatherTemperature);
+      sevenDaysWeatherItem.appendChild(sevenDaysWeatherDate);
+      sevenDaysWeatherItem.appendChild(sevenDaysWeatherIcon);
+      sevenDaysWeatherItem.appendChild(sevenDaysWeatherTemperature);
 
-    sevenDaysWeatherInfo.appendChild(sevenDaysWeatherItem);
-  }
+      sevenDaysWeatherInfo.appendChild(sevenDaysWeatherItem);
+    }
+
+    setTimeout(() => {
+      sevenDaysWeatherInfo.classList.add("fade-in");
+    }, 50);
+  }, 300);
 }
 
 //獲取今天往後算七天的日期資訊
