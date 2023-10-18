@@ -77,7 +77,7 @@ function getDateInfo(date = new Date()) {
 async function fetchTodayWeatherForCity(city) {
   try {
     const response = await fetch(
-      `http://127.0.0.1:3000/api/today_weather?search=${city}`
+      `/api/today_weather?search=${city}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -111,7 +111,7 @@ function renderTodayWeather(data) {
 async function fetchWeekWeatherForCity(city) {
   try {
     const response = await fetch(
-      `http://127.0.0.1:3000/api/week_weather?search=${city}`
+      `/api/week_weather?search=${city}`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
