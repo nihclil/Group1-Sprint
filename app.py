@@ -4,6 +4,7 @@ from api.today_weather import api_today_weather
 from api.week_weather import api_week_weather
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"]=True
 
 app.register_blueprint(api_today_weather)
 app.register_blueprint(api_week_weather)
@@ -14,4 +15,4 @@ def index():
   return render_template("index.html")
 
 if(__name__ == "__main__"):
-  app.run(host = "0.0.0.0", port = 3000)
+  app.run(debug = True, host = "0.0.0.0", port = 3000)
