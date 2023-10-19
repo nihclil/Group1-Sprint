@@ -1,4 +1,5 @@
 console.log("This is the start of our Sprint");
+const loader = document.querySelector(".loader")
 
 document.addEventListener("DOMContentLoaded", async function () {
   //顯示時間畫面渲染
@@ -7,11 +8,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   try {
     const defaultCity = "臺中市";
 
-    const todayData = await fetchTodayWeatherForCity(defaultCity);
-    renderTodayWeather(todayData);
+    let promiseToday = fetchTodayWeatherForCity(defaultCity)
+    let promiseWeek = fetchWeekWeatherForCity(defaultCity)
 
-    const weekData = await fetchWeekWeatherForCity(defaultCity);
-    renderWeekWeather(weekData);
+    Promise.all([promiseToday, promiseWeek])
+      .then( datas => {
+        let [ today, week ] = datas
+        renderTodayWeather(today);
+        renderWeekWeather(week);
+      })
+
   } catch (error) {
     console.error("Error fetching weather data:", error);
   }
@@ -22,12 +28,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (cityNameValue) {
       try {
-        const [todayData, weekData] = await Promise.all([
-          fetchTodayWeatherForCity(cityNameValue),
-          fetchWeekWeatherForCity(cityNameValue),
-        ]);
-        renderTodayWeather(todayData);
-        renderWeekWeather(weekData);
+        let promiseToday = fetchTodayWeatherForCity(cityNameValue)
+        let promiseWeek = fetchWeekWeatherForCity(cityNameValue)
+        Promise.all([promiseToday, promiseWeek])
+          .then( datas => {
+            let [ today, week ] = datas
+            renderTodayWeather(today);
+            renderWeekWeather(week);
+          })
       } catch (error) {
         console.error("Error fetching weather data:", error);
       }
@@ -74,19 +82,33 @@ function getDateInfo(date = new Date()) {
 
 //取得當天的天氣資訊
 async function fetchTodayWeatherForCity(city) {
-  try {
-    const response = await fetch(`/api/today_weather?search=${city}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(
-      "There was a problem fetching the today weather data:",
-      error.message
-    );
-  }
+
+  return fetch(`/api/today_weather?search=${city}`)
+    .then( response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json()
+    })
+    .catch((e)=>{
+      console.error(
+        "There was a problem fetching the today weather data:",
+        error.message
+      );
+    })
+  // try {
+  //   const response = await fetch(`/api/today_weather?search=${city}`);
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+  //   const data = await response.json();
+  //   return data;
+  // } catch (error) {
+  //   console.error(
+  //     "There was a problem fetching the today weather data:",
+  //     error.message
+  //   );
+  // }
 }
 
 //渲染當天天氣畫面
@@ -118,19 +140,32 @@ function renderTodayWeather(data) {
 
 //取得一個禮拜的天氣資訊
 async function fetchWeekWeatherForCity(city) {
-  try {
-    const response = await fetch(`/api/week_weather?search=${city}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(
-      "There was a problem fetching the week weather data:",
-      error.message
-    );
-  }
+  return fetch(`/api/week_weather?search=${city}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json()
+    })
+    .catch((error)=>{
+      console.error(
+            "There was a problem fetching the week weather data:",
+            error.message
+          );
+    })
+  // try {
+  //   const response = await fetch(`/api/week_weather?search=${city}`);
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+  //   const data = await response.json();
+  //   return data;
+  // } catch (error) {
+  //   console.error(
+  //     "There was a problem fetching the week weather data:",
+  //     error.message
+  //   );
+  // }
 }
 
 //渲染一個禮拜天氣畫面

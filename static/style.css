@@ -45,6 +45,7 @@ body {
 }
 .oneDayWeatherInfo {
   margin-top: 100px;
+  height: 167px;
 }
 .weatherIcon {
   background-image: url("/static/image/sunny-outline.svg");
@@ -114,7 +115,7 @@ body {
   font-size: 30px;
   color: white;
   width: 480px;
-  height: 190px;
+  height: 144px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,6 +136,29 @@ body {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
+
+.sevenDaysWeatherInfo-item:nth-child(1){
+  transition-delay: calc(.05s * 0);
+}
+.sevenDaysWeatherInfo-item:nth-child(2){
+  transition-delay: calc(.05s * 1);
+}
+.sevenDaysWeatherInfo-item:nth-child(3){
+  transition-delay: calc(.05s * 2);
+}
+.sevenDaysWeatherInfo-item:nth-child(4){
+  transition-delay: calc(.05s * 3);
+}
+.sevenDaysWeatherInfo-item:nth-child(5){
+  transition-delay: calc(.05s * 4);
+}
+.sevenDaysWeatherInfo-item:nth-child(6){
+  transition-delay: calc(.05s * 5);
+}
+.sevenDaysWeatherInfo-item:nth-child(7){
+  transition-delay: calc(.05s * 6);
+}
+
 .sevenDaysWeatherInfo.fade-in > .sevenDaysWeatherInfo-item {
   opacity: 1;
 }
@@ -181,6 +205,7 @@ body {
     margin-top: 20px;
     align-items: center;
     gap: 20px;
+    height: 70px;
   }
   .weatherTemperature {
     margin-bottom: 0px;
